@@ -243,10 +243,15 @@ button:disabled{
 </div>
 
 <script>
+  console.log("JS start");
 const GAS_URL = "https://script.google.com/macros/s/AKfycbx-YqFG3TpnAIytYUkvgBazP7j5AV4jR6REXFUjfhyRz_kPzG_W3UHxjX1pxe2bJJU/exec";
 
 const el = id => document.getElementById(id);
+const btn = document.getElementById("submitBtn");
+console.log("btn =", btn);
 
+btn.addEventListener("click", async () => {
+  console.log("clicked");
 document.getElementById("submitBtn").addEventListener("click", async () => {
 
   const nameEl    = el("name");
