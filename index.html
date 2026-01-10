@@ -253,11 +253,11 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   const btn = submitBtn;
 
   /* ===== 必須チェック ===== */
-  if (name.value === "選択してください") {
+  if (!nameEl || nameEl.value === "選択してください") {
     alert("名を選択してください");
     return;
   }
-  if (project.value === "選択してください") {
+  if (!projectEl || projectEl.value === "選択してください") {
     alert("プロジェクトを選択してください");
     return;
   }
