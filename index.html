@@ -243,26 +243,14 @@ button:disabled{
 </div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyAK7Mt97Lyec3IlnngxQacGyg_fSi-r6p5vN0MUuMtBmeEI_ibgV2fy9mnn7fhwnTf/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbx-YqFG3TpnAIytYUkvgBazP7j5AV4jR6REXFUjfhyRz_kPzG_W3UHxjX1pxe2bJJU/exec";
 
 const el = id => document.getElementById(id);
-dateEl.value = new Date().toISOString().split("T")[0];
 
 document.getElementById("submitBtn").addEventListener("click", async () => {
 
-  const dateEl        = el("date");
-  const nameEl        = el("name");
-  const projectEl     = el("project");
-  const destinationEl = el("destination");
-  const startEl       = el("startTime");
-  const endEl         = el("endTime");
-  const breakEl       = el("breakMin");
-  const commuteGoEl   = el("commuteGo");
-  const commuteBackEl = el("commuteBack");
-  const tripEl        = el("trip");
-  const heightWorkEl  = el("heightWork");
-  const carUseEl      = el("carUse");
-  const noteEl        = el("note");
+  const nameEl    = el("name");
+  const projectEl = el("project");
 
   if (!nameEl || !nameEl.value) {
     alert("名を選択してください");
@@ -272,67 +260,49 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     alert("プロジェクトを選択してください");
     return;
   }
+
   const baseData = {
-    date:        dateEl ? dateEl.value : "",
+    date:        el("date")?.value || "",
     name:        nameEl.value,
     project:     projectEl.value,
-    destination: destinationEl ? destinationEl.value : "",
-    startTime:   startEl ? startEl.value : "",
-    endTime:     endEl ? endEl.value : "",
-    breakMin:    breakEl ? Number(breakEl.value) : 0,
-    commuteGo:   commuteGoEl ? commuteGoEl.value : "",
-    commuteBack: commuteBackEl ? commuteBackEl.value : "",
-    trip:        tripEl ? tripEl.value : "",
-    heightWork:  heightWorkEl ? heightWorkEl.value : "",
-    carUse:      carUseEl ? carUseEl.value : "",
-    note:        noteEl ? noteEl.value : ""
+    destination: el("destination")?.value || "",
+    startTime:   el("startTime")?.value || "",
+    endTime:     el("endTime")?.value || "",
+    breakMin:    Number(el("breakMin")?.value || 0),
+    commuteGo:   el("commuteGo")?.value || "",
+    commuteBack: el("commuteBack")?.value || "",
+    trip:        el("trip")?.value || "",
+    heightWork:  el("heightWork")?.value || "",
+    carUse:      el("carUse")?.value || "",
+    note:        el("note")?.value || "",
+    overwrite:   false
   };
 
   try {
-    await fetch("【GASのexec URL】", {
+    let res = await fetch("【GASのexec URL】", {
       method: "POST",
       body: JSON.stringify(baseData)
     });
+    let result = await res.json();
 
-  /* ===== 1回目送信（重複確認） ===== */
-  const res = await fetch(GAS_URL, {
-  method: "POST",
-  body: JSON.stringify({ ...baseData, overwrite:false })
-  });
+    if (result.status === "duplicate") {
+      const ok = confirm("同じ日・同じ名のデータがあります。\n上書きしますか？");
+      if (!ok) return;
 
-  const result = await res.json();
+      baseData.overwrite = true;
 
-  /* ===== 重複時 ===== */
-  if (result.status === "duplicate") {
-    if (!confirm("同じ日付・同じ名のデータがあります。上書きしますか？")) {
-      btn.disabled = false;
-      return;
+      await fetch("【GASのexec URL】", {
+        method: "POST",
+        body: JSON.stringify(baseData)
+      });
     }
 
-    await fetch(GAS_URL, {
-  method: "POST",
-  body: JSON.stringify({ ...baseData, overwrite:true })
-    });
+    alert("送信完了");
+
+  } catch (err) {
+    alert("送信に失敗しました");
+    console.error(err);
   }
-
-  alert("送信しました");
-
-  /* ===== フォームリセット ===== */
-  name.selectedIndex = 0;
-  project.selectedIndex = 0;
-  destination.value = "";
-  startTime.value = "08:30";
-  endTime.value = "17:30";
-  breakMin.value = 60;
-  commuteGo.value = "自家用";
-  commuteBack.value = "自家用";
-  trip.value = "なし";
-  heightWork.value = "なし";
-  carUse.value = "使用なし";
-  note.value = "";
-  date.value = new Date().toISOString().split("T")[0];
-
-  btn.disabled = false;
 });
 </script>
 
