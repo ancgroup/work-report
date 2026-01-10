@@ -265,20 +265,20 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   btn.disabled = true;
 
   const baseData = {
-    date: date.value,
-    name: name.value,
-    project: project.value,
-    destination: destination.value,
-    startTime: startTime.value,
-    endTime: endTime.value,
-    breakMin: document.getElementById("breakMin").value,
-    commuteGo: commuteGo.value,
-    commuteBack: commuteBack.value,
-    trip: trip.value,
-    heightWork: heightWork.value,
-    carUse: carUse.value,
-    note: note.value
-  };
+  date: dateEl ? dateEl.value : "",
+  name: nameEl ? nameEl.value : "",
+  project: projectEl ? projectEl.value : "",
+  destination: destinationEl ? destinationEl.value : "",
+  startTime: startEl ? startEl.value : "",
+  endTime: endEl ? endEl.value : "",
+  breakMin: breakEl ? breakEl.value : 0,
+  commuteGo: commuteGoEl ? commuteGoEl.value : "",
+  commuteBack: commuteBackEl ? commuteBackEl.value : "",
+  trip: tripEl ? tripEl.value : "",
+  heightWork: heightWorkEl ? heightWorkEl.value : "",
+  carUse: carUseEl ? carUseEl.value : "",
+  note: noteEl ? noteEl.value : ""
+};
 
   /* ===== 1回目送信（重複確認） ===== */
   const res = await fetch(GAS_URL, {
