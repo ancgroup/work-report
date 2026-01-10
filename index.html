@@ -2,7 +2,6 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>日報入力</title>
 
 <style>
@@ -246,39 +245,54 @@ button:disabled{
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbyAK7Mt97Lyec3IlnngxQacGyg_fSi-r6p5vN0MUuMtBmeEI_ibgV2fy9mnn7fhwnTf/exec";
 
-const dateEl = document.getElementById("date");
+const el = id => document.getElementById(id);
 dateEl.value = new Date().toISOString().split("T")[0];
 
 document.getElementById("submitBtn").addEventListener("click", async () => {
-  const btn = submitBtn;
 
-  /* ===== 必須チェック ===== */
-  if (!nameEl || nameEl.value === "選択してください") {
+  const dateEl        = el("date");
+  const nameEl        = el("name");
+  const projectEl     = el("project");
+  const destinationEl = el("destination");
+  const startEl       = el("startTime");
+  const endEl         = el("endTime");
+  const breakEl       = el("breakMin");
+  const commuteGoEl   = el("commuteGo");
+  const commuteBackEl = el("commuteBack");
+  const tripEl        = el("trip");
+  const heightWorkEl  = el("heightWork");
+  const carUseEl      = el("carUse");
+  const noteEl        = el("note");
+
+  if (!nameEl || !nameEl.value) {
     alert("名を選択してください");
     return;
   }
-  if (!projectEl || projectEl.value === "選択してください") {
+  if (!projectEl || !projectEl.value) {
     alert("プロジェクトを選択してください");
     return;
   }
-
-  btn.disabled = true;
-
   const baseData = {
-  date: dateEl ? dateEl.value : "",
-  name: nameEl ? nameEl.value : "",
-  project: projectEl ? projectEl.value : "",
-  destination: destinationEl ? destinationEl.value : "",
-  startTime: startEl ? startEl.value : "",
-  endTime: endEl ? endEl.value : "",
-  breakMin: breakEl ? breakEl.value : 0,
-  commuteGo: commuteGoEl ? commuteGoEl.value : "",
-  commuteBack: commuteBackEl ? commuteBackEl.value : "",
-  trip: tripEl ? tripEl.value : "",
-  heightWork: heightWorkEl ? heightWorkEl.value : "",
-  carUse: carUseEl ? carUseEl.value : "",
-  note: noteEl ? noteEl.value : ""
-};
+    date:        dateEl ? dateEl.value : "",
+    name:        nameEl.value,
+    project:     projectEl.value,
+    destination: destinationEl ? destinationEl.value : "",
+    startTime:   startEl ? startEl.value : "",
+    endTime:     endEl ? endEl.value : "",
+    breakMin:    breakEl ? Number(breakEl.value) : 0,
+    commuteGo:   commuteGoEl ? commuteGoEl.value : "",
+    commuteBack: commuteBackEl ? commuteBackEl.value : "",
+    trip:        tripEl ? tripEl.value : "",
+    heightWork:  heightWorkEl ? heightWorkEl.value : "",
+    carUse:      carUseEl ? carUseEl.value : "",
+    note:        noteEl ? noteEl.value : ""
+  };
+
+  try {
+    await fetch("【GASのexec URL】", {
+      method: "POST",
+      body: JSON.stringify(baseData)
+    });
 
   /* ===== 1回目送信（重複確認） ===== */
   const res = await fetch(GAS_URL, {
