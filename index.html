@@ -243,7 +243,8 @@ button:disabled{
 </div>
 
 <script>
-  console.log("JS start");
+console.log("JS start");
+
 const GAS_URL = "https://script.google.com/macros/s/AKfycbx-YqFG3TpnAIytYUkvgBazP7j5AV4jR6REXFUjfhyRz_kPzG_W3UHxjX1pxe2bJJU/exec";
 
 const el = id => document.getElementById(id);
@@ -252,7 +253,6 @@ console.log("btn =", btn);
 
 btn.addEventListener("click", async () => {
   console.log("clicked");
-document.getElementById("submitBtn").addEventListener("click", async () => {
 
   const nameEl    = el("name");
   const projectEl = el("project");
@@ -284,7 +284,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   };
 
   try {
-    let res = await fetch("【GASのexec URL】", {
+    let res = await fetch(GAS_URL, {
       method: "POST",
       body: JSON.stringify(baseData)
     });
@@ -296,13 +296,13 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
       baseData.overwrite = true;
 
-      await fetch("【GASのexec URL】", {
+      await fetch(GAS_URL, {
         method: "POST",
         body: JSON.stringify(baseData)
       });
     }
 
-    alert("送信完了");
+    document.getElementById("completeMsg").style.display = "block";
 
   } catch (err) {
     alert("送信に失敗しました");
