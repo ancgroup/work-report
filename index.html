@@ -177,7 +177,7 @@ button:disabled{
     </div>
     <div class="field">
       <label>休憩（分）</label>
-      <input type="number" class="input-breakMin" id="breakmMin" value="60" min="0" step="10">
+      <input type="number" class="input-breakMin" id="breakMin" value="60" min="0" step="10">
     </div>
   </div>
 </div>
@@ -240,7 +240,7 @@ button:disabled{
   <button type="button" id="submitBtn">送信</button>
 </div>
 
-</div>
+<div id="completeMsg" style="display:none;">送信が完了しました</div>
 
 <script>
 console.log("JS start");
@@ -303,7 +303,6 @@ btn.addEventListener("click", async () => {
     }
 
     document.getElementById("completeMsg").style.display = "block";
-   <div id="completeMsg" style="display:none;">送信が完了しました</div>
 
   } catch (err) {
     alert("送信に失敗しました");
