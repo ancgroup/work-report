@@ -252,7 +252,18 @@ const btn = document.getElementById("submitBtn");
 console.log("btn =", btn);
 
 btn.addEventListener("click", async () => {
-  console.log("clicked");
+
+console.log("clicked"); 
+google.script.run
+  .withSuccessHandler(res => {
+    console.log("成功:", res);
+    alert("送信しました");
+  })
+  .withFailureHandler(err => {
+    console.error("失敗:", err);
+    alert("エラーが発生しました: " + err.message);
+  })
+  .submitToSheet(); // ← ここに「.gs」ファイル側で作成した関数名を書く
 
   const nameEl    = el("name");
   const projectEl = el("project");
