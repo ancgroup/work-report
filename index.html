@@ -243,7 +243,7 @@ button:disabled{
 <div id="completeMsg" style="display:none;">送信完了 本日もお疲れ様でした！</div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz9PdcqpwR2i79H4QCLtYpwkhlYQsKZ71H3G5GZexEWypmpAjvbsmg9PSlgD72zxIwp/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbyGlpCUKgG7UnDzZ6V_cKLM71tWHkcZi1h8O1NQ_DSYYUWxKwk0JJGqLVdieBSlhVMt/exec";
 
 const el = id => document.getElementById(id);
 const btn = document.getElementById("submitBtn");
@@ -261,7 +261,7 @@ btn.addEventListener("click", async () => {
   const nameEl    = el("name");
   const projectEl = el("project");
 
-  if (nameEl.value === "選択してください") {
+  if (nameEl.value === "選択してください" || !nameEl.value) {
     alert("名を選択してください");
     return;
   }
@@ -287,7 +287,7 @@ btn.addEventListener("click", async () => {
     overwrite:   false
   };
 
-  btn.disabled = true;
+  btn.disabled = true; // 送信開始時に無効化
 
   try {
     let res = await fetch(GAS_URL, {
@@ -296,28 +296,35 @@ btn.addEventListener("click", async () => {
     });
     let result = await res.json();
 
+    // 重複時の処理
     if (result.status === "duplicate") {
       const ok = confirm("同じ日・同じ名のデータがあります。\n上書きしますか？");
       if (ok) {
-        baseData.overwrite = true;
+        baseData.overwrite = true; // 上書きフラグを立てて再送
         res = await fetch(GAS_URL, {
           method: "POST",
           body: JSON.stringify(baseData)
         });
         result = await res.json();
+      } else {
+        // キャンセル時はボタンを戻して終了
+        btn.disabled = false;
+        return;
       }
     }
 
-    if (result.status === "success" || result.status === "duplicate") {
+    if (result.status === "success") {
       el("completeMsg").style.display = "block";
       alert("送信しました");
+    } else {
+      alert("エラーが発生しました: " + (result.message || "不明なエラー"));
     }
 
   } catch (err) {
-    alert("送信に失敗しました");
+    alert("通信に失敗しました。GASのデプロイURLを確認してください。");
     console.error(err);
   } finally {
-    btn.disabled = false;
+    btn.disabled = false; // 最終的にボタンを元に戻す
   }
 });
 </script>
