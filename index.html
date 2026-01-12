@@ -243,81 +243,71 @@ button:disabled{
 <div id="completeMsg" style="display:none;">送信が完了しました</div>
 
 <script>
-console.log("JS start");
-
-const GAS_URL = "https://script.google.com/macros/s/AKfycbx7OJwIC-8q0Cb8FpzC4jWbmMCAeegCcN5S853aFGsLXGZJ_akwoc7UwDaKJCt9DS-M/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbzrBsGjWDrkzRnvbdQgmxOUQV82lnCl7F0PfArADEhjVYLz52XwNqH2G08NSfWP1vcv/exec";
 
 const el = id => document.getElementById(id);
 const btn = document.getElementById("submitBtn");
-console.log("btn =", btn);
 
 btn.addEventListener("click", async () => {
-
-console.log("clicked"); 
-google.script.run
-  .withSuccessHandler(res => {
-    console.log("成功:", res);
-    alert("送信しました");
-  })
-  .withFailureHandler(err => {
-    console.error("失敗:", err);
-    alert("エラーが発生しました: " + err.message);
-  })
-  .submitToSheet(); // ← ここに「.gs」ファイル側で作成した関数名を書く
-
+  // 1. データの収集
   const nameEl    = el("name");
   const projectEl = el("project");
 
-  if (!nameEl || !nameEl.value) {
+  if (nameEl.value === "選択してください") {
     alert("名を選択してください");
-    return;
-  }
-  if (!projectEl || !projectEl.value) {
-    alert("プロジェクトを選択してください");
     return;
   }
 
   const baseData = {
-    date:        el("date")?.value || "",
+    date:        el("date").value,
     name:        nameEl.value,
     project:     projectEl.value,
-    destination: el("destination")?.value || "",
-    startTime:   el("startTime")?.value || "",
-    endTime:     el("endTime")?.value || "",
-    breakMin:    Number(el("breakMin")?.value || 0),
-    commuteGo:   el("commuteGo")?.value || "",
-    commuteBack: el("commuteBack")?.value || "",
-    trip:        el("trip")?.value || "",
-    heightWork:  el("heightWork")?.value || "",
-    carUse:      el("carUse")?.value || "",
-    note:        el("note")?.value || "",
+    destination: el("destination").value,
+    startTime:   el("startTime").value,
+    endTime:     el("endTime").value,
+    breakMin:    Number(el("breakMin").value || 0),
+    commuteGo:   el("commuteGo").value,
+    commuteBack: el("commuteBack").value,
+    trip:        el("trip").value,
+    heightWork:  el("heightWork").value,
+    carUse:      el("carUse").value,
+    note:        el("note").value,
     overwrite:   false
   };
 
+  btn.disabled = true;
+
   try {
+    // 2. 送信処理
     let res = await fetch(GAS_URL, {
       method: "POST",
       body: JSON.stringify(baseData)
     });
     let result = await res.json();
 
+    // 3. 上書き確認処理
     if (result.status === "duplicate") {
-      const ok = confirm("同じ日・同じ名のデータがあります。\n上書きしますか？");
-      if (!ok) return;
-
-      baseData.overwrite = true;
-
-      await fetch(GAS_URL, {
-        method: "POST",
-        body: JSON.stringify(baseData)
-      });
+      const ok = confirm("同じ日・同じ名のデータがあります。上書きしますか？");
+      if (ok) {
+        baseData.overwrite = true;
+        res = await fetch(GAS_URL, {
+          method: "POST",
+          body: JSON.stringify(baseData)
+        });
+        result = await res.json();
+      }
     }
 
-    document.getElementById("completeMsg").style.display = "block";
+    if (result.status === "success") {
+      alert("送信完了しました");
+      el("completeMsg").style.display = "block";
+    }
 
   } catch (err) {
-    alert("送信に失敗しました");
+    alert("通信エラーが発生しました");
     console.error(err);
+  } finally {
+    btn.disabled = false;
   }
 });
 </script>
