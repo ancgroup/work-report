@@ -161,7 +161,7 @@ button:disabled{
 
   <div class="field">
     <label>行先</label>
-    <input type="text" class="input-destination" id="destination" placeholder="弘前">
+    <input type="text" class="input-destination" id="destination" placeholder="例）弘前">
   </div>
 </div>
 
@@ -232,7 +232,7 @@ button:disabled{
 <div class="form-row">
   <div class="field">
     <label>備考</label>
-    <textarea id="note"></textarea>
+    <textarea id="note" placeholder="自家用（作業）車使用の際は距離（往復）も記入"></textarea>
   </div>
 </div>
 
@@ -243,7 +243,7 @@ button:disabled{
 <div id="completeMsg" style="display:none;">送信完了 本日もお疲れ様でした！</div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyMdfxrjvJ-uKRc70Erf6L9dFYXevZImnu7l6rKxw778fMbE3NPM1LxdhzWX0d2LvDD/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwpuhd5ZJfInwhj6Zthf5gOoztg39IxuAqaiP7W6zzNTHHZqo0Cfn_CF-FGgZd0Hi4s/exec";
 
 const el = id => document.getElementById(id);
 const btn = document.getElementById("submitBtn");
