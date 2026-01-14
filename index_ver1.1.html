@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>日報入力</title>
+
+<style>
+:root{
+  --main:#4a6cf7;
+  --bg:#f4f6fb;
+  --border:#dcdfea;
+}
+
+body{
+  margin:0;
+  padding:12px;
+  background:var(--bg);
+  font-family:system-ui,-apple-system,sans-serif;
+}
+
+.form-card{
+  max-width:1200px;
+  margin:0 auto;
+  background:#fff;
+  border-radius:10px;
+  padding:16px 18px;
+}
+
+h1{
+  margin:0 0 10px 0;
+  font-size:26px;
+  color:var(--main);
+  white-space:nowrap;
+}
+
+.form-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 14px;
+  align-items:flex-end;
+  margin-bottom:10px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+label{
+  font-size:12px;
+  color:#555;
+  margin-bottom:2px;
+}
+
+input, select, textarea{
+  padding:6px 8px;
+  font-size:14px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  width:auto;
+}
+
+.select-name{ width:160px; }
+.input-date{ width:140px; }
+.select-medium{ width:180px; }
+.input-destination{ width:120px; }
+.input-time{ width:110px; }
+.input-breakMin{ width:80px; }
+.select-short{ width:150px; }
+
+textarea{
+  width:360px;
+  min-height:60px;
+}
+
+.time-group{
+  display:flex;
+  gap:10px;
+}
+
+button{
+  padding:8px 22px;
+  font-size:15px;
+  border:none;
+  border-radius:6px;
+  background:var(--main);
+  color:#fff;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+@media (max-width:768px){
+  .form-row{
+    flex-direction:column;
+    gap:8px;
+  }
+}
+#completeMsg {
+  display: none;
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  padding: 8px 14px;
+  background: #2e7d32;
+  color: #fff;
+  font-size: 13px;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="form-card">
+
+<h1>日報入力</h1>
+
+<div class="form-row">
+  <div class="field">
+    <label>名</label>
+    <select class="select-name" id="name">
+        <option>選択してください</option>
+        <option>亮</option>
+        <option>達</option>
+        <option>石</option>
+        <option>盛</option>
+        <option>木</option>
+        <option>澤</option>
+        <option>楠</option>
+        <option>成</option>
+        <option>絵</option>
+        <option>陸</option>
+      </select>
+  </div>
+
+  <div class="field">
+    <label>日付</label>
+    <input type="date" class="input-date" id="date">
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="field">
+    <label>プロジェクト</label>
+    <select class="select-medium" id="project">
+        <option>DCM</option>
+        <option>小電力</option>
+        <option>太陽光</option>
+        <option>7COM</option>
+        <option>街灯</option>
+        <option>調査</option>
+        <option>Other</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>行先</label>
+    <input type="text" class="input-destination" id="destination" placeholder="例）弘前">
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="time-group">
+    <div class="field">
+      <label>開始時間</label>
+      <input type="time" class="input-time" id="startTime" step="900" value="08:30">
+    </div>
+    <div class="field">
+      <label>終了時間</label>
+      <input type="text" class="input-time" id="endTime" value="17:30" placeholder="17:30">
+    </div>
+    <div class="field">
+      <label>休憩（分）</label>
+      <input type="number" class="input-breakMin" id="breakMin" value="60" min="0" step="10">
+    </div>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="field">
+    <label>通勤往路</label>
+    <select class="select-short" id="commuteGo">
+      <option selected>自家用</option>
+      <option>社用</option>
+      <option>－</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>通勤復路</label>
+    <select class="select-short" id="commuteBack">
+      <option selected>自家用</option>
+      <option>社用</option>
+      <option>－</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="field">
+    <label>出張</label>
+    <select class="select-short" id="trip">
+      <option>なし</option>
+      <option>あり</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>10m以上の高所作業</label>
+    <select class="select-short" id="heightWork">
+      <option>なし</option>
+      <option>あり</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>自家用（作業）車の使用</label>
+    <select class="select-medium" id="carUse">
+      <option selected>－</option>
+      <option>移動のみ</option>
+      <option>作業用で使用</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-row">
+  <div class="field">
+    <label>備考</label>
+    <textarea id="note" placeholder="自家用（作業）車使用の際は距離（往復）も記入"></textarea>
+  </div>
+</div>
+
+<div class="form-row">
+  <button type="button" id="submitBtn">送信</button>
+</div>
+
+<div id="completeMsg" style="display:none;">送信完了 本日もお疲れ様でした！</div>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycby4NOYrjzgPyK0uWXlmjP95SoThgf89GY_fRM8QlYVnWl8njimZIDFEKVm73U8WHiJmTw/exec";
+
+const el = id => document.getElementById(id);
+const btn = document.getElementById("submitBtn");
+
+// 日付の初期値を設定
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  el("date").value = `${yyyy}-${mm}-${dd}`;
+});
+
+btn.addEventListener("click", async () => {
+  const nameEl    = el("name");
+  const projectEl = el("project");
+
+  if (nameEl.value === "選択してください" || !nameEl.value) {
+    alert("名を選択してください");
+    return;
+  }
+  if (!projectEl.value) {
+    alert("プロジェクトを選択してください");
+    return;
+  }
+
+  const baseData = {
+    date:        el("date").value,
+    name:        nameEl.value,
+    project:     projectEl.value,
+    destination: el("destination").value,
+    startTime:   el("startTime").value,
+    endTime:     el("endTime").value,
+    breakMin:    Number(el("breakMin").value || 0),
+    commuteGo:   el("commuteGo").value,
+    commuteBack: el("commuteBack").value,
+    trip:        el("trip").value,
+    heightWork:  el("heightWork").value,
+    carUse:      el("carUse").value,
+    note:        el("note").value,
+    overwrite:   false
+  };
+
+  btn.disabled = true; // 送信開始時に無効化
+
+  try {
+    let res = await fetch(GAS_URL, {
+      method: "POST",
+      body: JSON.stringify(baseData)
+    });
+    let result = await res.json();
+
+    // 重複時の処理
+    if (result.status === "duplicate") {
+      const ok = confirm("同じ日・同じ名のデータがあります。\n上書きしますか？");
+      if (ok) {
+        baseData.overwrite = true; // 上書きフラグを立てて再送
+        res = await fetch(GAS_URL, {
+          method: "POST",
+          body: JSON.stringify(baseData)
+        });
+        result = await res.json();
+      } else {
+        // キャンセル時はボタンを戻して終了
+        btn.disabled = false;
+        return;
+      }
+    }
+
+    if (result.status === "success") {
+      el("completeMsg").style.display = "block";
+      alert("送信しました");
+    } else {
+      alert("エラーが発生しました: " + (result.message || "不明なエラー"));
+    }
+
+  } catch (err) {
+    alert("通信に失敗しました。GASのデプロイURLを確認してください。");
+    console.error(err);
+  } finally {
+    btn.disabled = false; // 最終的にボタンを元に戻す
+  }
+});
+</script>
+</body>
+</html>
