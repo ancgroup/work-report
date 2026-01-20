@@ -140,7 +140,6 @@ button:disabled{
         <option>楠</option>
         <option>成</option>
         <option>絵</option>
-        <option>陸</option>
     </select>
     </div>
     
@@ -164,13 +163,13 @@ button:disabled{
         <option>Other</option>
           </select>
   </div>
+
+  <div class="field">
+    <label>行先</label>
+    <input type="text" class="input-destination" id="destination" placeholder="例）弘前">
+  </div>
 </div>
 
-    <div class="form-row">
-      <div class="field" style="flex:1;">
-        <label>行先</label>
-        <input type="text" id="destination">
-      </div>
       <div class="field" style="width:100px;">
         <label>開始時間</label>
         <input type="time" id="startTime" value="08:30" required>
@@ -191,7 +190,7 @@ button:disabled{
         <select id="commuteGo">
           <option value="自家用">自家用</option>
           <option value="社用車">社用車</option>
-          <option value="徒歩等">徒歩等</option>
+          <option value="-">-</option>
         </select>
       </div>
       <div class="field" style="width:100px;">
@@ -199,20 +198,20 @@ button:disabled{
         <select id="commuteBack">
           <option value="自家用">自家用</option>
           <option value="社用車">社用車</option>
-          <option value="徒歩等">徒歩等</option>
+          <option value="-">-</option>
         </select>
       </div>
       <div class="field" style="width:80px;">
         <label>出張</label>
         <select id="trip">
-          <option value="なし">なし</option>
+          <option value="-">-</option>
           <option value="あり">あり</option>
         </select>
       </div>
       <div class="field" style="width:110px;">
         <label>10m以上の高所作業</label>
         <select id="heightWork">
-          <option value="なし">なし</option>
+          <option value="-">-</option>
           <option value="あり">あり</option>
         </select>
       </div>
@@ -222,8 +221,8 @@ button:disabled{
       <div class="field" style="width:160px;">
         <label>自家用(作業)車の使用</label>
         <select id="carUse">
-          <option value="－">－</option>
-          <option value="資材運搬">資材運搬</option>
+          <option value="-">-</option>
+          <option value="作業で使用">作業で使用</option>
           <option value="移動のみ">移動のみ</option>
         </select>
       </div>
@@ -245,6 +244,8 @@ button:disabled{
 
   </form>
 </div>
+
+<div id="completeMsg" style="display:none;">本日もお疲れ様でした！</div>
 
 <script>
 // GASのウェブアプリURL（デプロイ後に書き換えてください）
