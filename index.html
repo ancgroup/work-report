@@ -21,100 +21,92 @@ body{
 }
 
 .form-card{
-  max-width:800px;
+  max-width:600px;
   margin:0 auto;
   background:#fff;
   border-radius:10px;
-  padding:20px 24px;
+  padding:20px;
   box-shadow:0 4px 10px rgba(0,0,0,0.05);
 }
 
 h1{
-  margin:0 0 5px 0;
-  font-size:24px;
+  margin:0;
+  font-size:20px;
   color:var(--main);
 }
 
 .sub-header {
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
-  margin: 0 0 20px 0;
-  font-weight: bold;
+  margin: 4px 0 20px 0;
 }
 
 .form-row{
   display:flex;
   flex-wrap:wrap;
-  gap:16px;
-  align-items:flex-end;
-  margin-bottom:16px;
+  gap:12px;
+  margin-bottom:15px;
 }
 
 .field{
   display:flex;
   flex-direction:column;
+  flex: 1;
+  min-width: 120px;
 }
 
 label{
-  font-size:13px;
+  font-size:12px;
   color:#555;
-  margin-bottom:6px;
-  font-weight:500;
+  margin-bottom:4px;
+  font-weight:bold;
 }
 
 input, select, textarea{
-  padding:10px;
+  padding:8px;
   border:1px solid var(--border);
   border-radius:6px;
-  font-size:15px;
+  font-size:14px;
   outline:none;
-  transition:0.2s;
   background:#f9f9f9;
 }
-input:focus, select:focus, textarea:focus{
-  border-color:var(--main);
-  background:#fff;
-  box-shadow:0 0 0 3px rgba(74,108,247,0.1);
+
+/* 各段の個別調整 */
+.row-times .field { min-width: 80px; }
+.row-commute .field { min-width: 100px; }
+
+/* 備考 */
+.row-note .field { width: 100%; }
+textarea { height: 80px; }
+
+/* 注釈 */
+.info-text {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 5px;
 }
 
-textarea{
-  resize:vertical;
+/* 送信ボタン（小さめ） */
+.btn-container {
+  text-align: center;
+  margin-top: 10px;
 }
-
 button{
   background:var(--main);
   color:#fff;
   border:none;
-  padding:14px;
+  padding:10px 30px;
   border-radius:6px;
-  font-size:16px;
+  font-size:14px;
   font-weight:bold;
   cursor:pointer;
-  width:100%;
   transition:0.2s;
-  margin-top:10px;
 }
-button:hover{
-  opacity:0.9;
-  transform:translateY(-1px);
-}
-button:disabled{
-  background:#ccc;
-  cursor:not-allowed;
-  transform:none;
-}
+button:hover{ opacity:0.8; }
+button:disabled{ background:#ccc; }
 
-.footer-note {
-  font-size: 12px;
-  color: #666;
-  margin-top: 15px;
-  text-align: right;
-}
-
-/* スマホ調整 */
-@media(max-width:600px){
-  .form-row{ gap:12px; }
-  .field{ width:100% !important; }
+@media(max-width:480px){
+  .field { min-width: 45%; }
 }
 </style>
 </head>
@@ -127,65 +119,58 @@ button:disabled{
   <form id="reportForm">
   
     <div class="form-row">
-  <div class="field">
-    <label>名</label>
-    <select class="select-name" id="name">
-        <option>選択してください</option>
-        <option>亮</option>
-        <option>達</option>
-        <option>石</option>
-        <option>盛</option>
-        <option>木</option>
-        <option>澤</option>
-        <option>楠</option>
-        <option>成</option>
-        <option>絵</option>
-    </select>
+      <div class="field">
+        <label>名</label>
+        <select id="name" required>
+          <option value="">選択</option>
+          <option value="亮">亮</option>
+          <option value="盛">盛</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>日付</label>
+        <input type="date" id="date" required>
+      </div>
     </div>
-    
-  <div class="field">
-    <label>日付</label>
-    <input type="date" class="input-date" id="date">
-  </div>
-</div>
 
-<div class="form-row">
-  <div class="field">
-    <label>プロジェクト</label>
-    <select class="select-medium" id="project">
-        <option>DCM</option>
-        <option>小電力</option>
-        <option>太陽光</option>
-        <option>7COM</option>
-        <option>街灯調査</option>
-        <option>CS</option>
-        <option>SB</option>
-        <option>Other</option>
-          </select>
-  </div>
+    <div class="form-row">
+      <div class="field">
+        <label>プロジェクト</label>
+        <select id="project" required>
+          <option value="">選択</option>
+          <option value="DCM">DCM</option>
+          <option value="小電力">小電力</option>
+          <option value="太陽光">太陽光</option>
+          <option value="街灯調査">街灯調査</option>
+          <option value="CS">CS</option>
+          <option value="7COM">7COM</option>
+          <option value="SB">SB</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>行先</label>
+        <input type="text" class="input-destination" id="destination" placeholder="例）弘前">
+      </div>
+    </div>
 
-  <div class="field">
-    <label>行先</label>
-    <input type="text" class="input-destination" id="destination" placeholder="例）弘前">
-  </div>
-</div>
-
-      <div class="field" style="width:100px;">
+    <div class="form-row row-times">
+      <div class="field">
         <label>開始時間</label>
-        <input type="time" id="startTime" value="08:30" required>
+        <input type="time" id="startTime" value="08:30">
       </div>
-      <div class="field" style="width:100px;">
+      <div class="field">
         <label>終了時間</label>
-        <input type="time" id="endTime" value="17:30" required>
+        <input type="time" id="endTime" value="17:30">
       </div>
-      <div class="field" style="width:70px;">
+      <div class="field">
         <label>休憩(分)</label>
         <input type="number" id="breakMin" value="60">
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="field" style="width:100px;">
+    <div class="form-row row-commute">
+      <div class="field">
         <label>通勤往路</label>
         <select id="commuteGo">
           <option value="自家用">自家用</option>
@@ -193,7 +178,7 @@ button:disabled{
           <option value="-">-</option>
         </select>
       </div>
-      <div class="field" style="width:100px;">
+      <div class="field">
         <label>通勤復路</label>
         <select id="commuteBack">
           <option value="自家用">自家用</option>
@@ -201,14 +186,14 @@ button:disabled{
           <option value="-">-</option>
         </select>
       </div>
-      <div class="field" style="width:80px;">
+      <div class="field" style="flex:0.5; min-width:60px;">
         <label>出張</label>
         <select id="trip">
           <option value="-">-</option>
           <option value="あり">あり</option>
         </select>
       </div>
-      <div class="field" style="width:110px;">
+      <div class="field">
         <label>10m以上の高所作業</label>
         <select id="heightWork">
           <option value="-">-</option>
@@ -218,7 +203,7 @@ button:disabled{
     </div>
 
     <div class="form-row">
-      <div class="field" style="width:160px;">
+      <div class="field">
         <label>自家用(作業)車の使用</label>
         <select id="carUse">
           <option value="-">-</option>
@@ -226,82 +211,70 @@ button:disabled{
           <option value="移動のみ">移動のみ</option>
         </select>
       </div>
-      <div class="field" style="width:180px;">
-        <label>通勤外使用距離(往復km)</label>
-        <input type="number" id="carDistance" min="0" step="0.1" placeholder="0">
+      <div class="field">
+        <label>使用距離</label>
+        <input type="number" id="carDistance" placeholder="0" step="0.1">
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="field" style="flex:1;">
+    <p class="info-text">※作業車の移動距離は、通常通り車両日報のみ記載でOK</p>
+
+    <div class="form-row row-note">
+      <div class="field">
         <label>備考</label>
-        <textarea id="note" rows="3"></textarea>
+        <textarea id="note"></textarea>
       </div>
     </div>
 
-    <button type="button" id="submitBtn">送信</button>
-    <p class="footer-note">※作業車の移動距離は、通常通り車両日報のみ記載でOK</p>
+    <div class="btn-container">
+      <button type="button" id="submitBtn">送信</button>
+    </div>
 
   </form>
 </div>
 
-<div id="completeMsg" style="display:none;">本日もお疲れ様でした！</div>
-
 <script>
-// GASのウェブアプリURL（デプロイ後に書き換えてください）
-const GAS_URL = "https://script.google.com/macros/s/AKfycbyN1J5Fq3s2wVb5tF6g-zHk7j4M1q2p3r4s5t6u7v8w9x0y1z/exec"; 
+const GAS_URL = "https://script.google.com/macros/s/AKfycby4NOYrjzgPyK0uWXlmjP95SoThgf89GY_fRM8QlYVnWl8njimZIDFEKVm73U8WHiJmTw/exec";
 
-// 初期日付設定
 document.getElementById('date').valueAsDate = new Date();
-
 function el(id){ return document.getElementById(id); }
 
 el("submitBtn").addEventListener("click", async () => {
   const btn = el("submitBtn");
-  
-  // 必須チェック
   if(!el("date").value || !el("name").value || !el("project").value){
-    alert("日付・名・プロジェクトは必須です");
+    alert("名・日付・プロジェクトは必須です");
     return;
   }
 
   const baseData = {
-    date:        el("date").value,
-    name:        el("name").value,
-    project:     el("project").value,
+    date: el("date").value,
+    name: el("name").value,
+    project: el("project").value,
     destination: el("destination").value,
-    startTime:   el("startTime").value,
-    endTime:     el("endTime").value,
-    breakMin:    Number(el("breakMin").value || 0),
-    commuteGo:   el("commuteGo").value,
+    startTime: el("startTime").value,
+    endTime: el("endTime").value,
+    breakMin: Number(el("breakMin").value || 0),
+    commuteGo: el("commuteGo").value,
     commuteBack: el("commuteBack").value,
-    trip:        el("trip").value,
-    heightWork:  el("heightWork").value,
-    carUse:      el("carUse").value,
-    carDistance: el("carDistance").value, // ★追加: 距離データ
-    note:        el("note").value,
-    overwrite:   false
+    trip: el("trip").value,
+    heightWork: el("heightWork").value,
+    carUse: el("carUse").value,
+    carDistance: el("carDistance").value,
+    note: el("note").value,
+    overwrite: false
   };
 
-  btn.disabled = true; 
+  btn.disabled = true;
   btn.textContent = "送信中...";
 
   try {
-    let res = await fetch(GAS_URL, {
-      method: "POST",
-      body: JSON.stringify(baseData)
-    });
+    let res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify(baseData) });
     let result = await res.json();
 
-    // 重複時の処理
     if (result.status === "duplicate") {
-      const ok = confirm("同じ日・同じ名のデータがあります。\n上書きしますか？");
-      if (ok) {
-        baseData.overwrite = true; 
-        res = await fetch(GAS_URL, {
-          method: "POST",
-          body: JSON.stringify(baseData)
-        });
+      if (confirm("同じ日・同じ名のデータがあります。上書きしますか？")) {
+        baseData.overwrite = true;
+        res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify(baseData) });
         result = await res.json();
       } else {
         btn.disabled = false;
@@ -312,11 +285,10 @@ el("submitBtn").addEventListener("click", async () => {
 
     if(result.status === "success"){
       alert("登録完了しました！");
-      // フォームリセット等の処理が必要なら記述
+      location.reload(); 
     } else {
-      alert("エラーが発生しました: " + result.message);
+      alert("エラー: " + result.message);
     }
-
   } catch(e) {
     alert("送信失敗: " + e.toString());
   } finally {
